@@ -4,9 +4,13 @@
   "description": "",
   "main": "electron-src/js/index.js",
   "dependencies": {
-    "electron": "^0.4.1"
+    "electron-prebuilt": ""
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "coffee-script": "",
+    "typescript": "",
+    "jade": ""
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

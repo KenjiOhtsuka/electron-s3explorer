@@ -1,12 +1,14 @@
 'use strict';
 
-electron = require 'electron'
-app = electron.app # Module to control application life.
-BrowserWindow = electron.BrowserWindow # Module to create native browser window.
+#electron = require 'electron'
+#app = electron.app # Module to control application life.
+app = require 'app'
+#BrowserWindow = electron.BrowserWindow # Module to create native browser window.
+BrowserWindow = require 'browser-window'
 
 # Keep a global reference of the window object, if you don't, the window will
 # be closed automatically when the JavaScript object is garbage collected.
-mainWindow = null;
+mainWindow = null
 
 # Quit when all windows are closed.
 app.on 'window-all-closed', () ->
@@ -22,10 +24,10 @@ app.on 'ready', () ->
   mainWindow = new BrowserWindow {width: 800, height: 600}
 
   # and load the index.html of the app.
-  mainWindow.loadURL 'file://' + __dirname + '/index.html'
+  mainWindow.loadURL 'file://' + __dirname + '/../html/index.html'
 
   # Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  #mainWindow.webContents.openDevTools()
 
   # Emitted when the window is closed.
   mainWindow.on 'closed', () ->
