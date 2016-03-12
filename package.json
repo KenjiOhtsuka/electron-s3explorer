@@ -2,13 +2,14 @@
   "name": "s3explorer",
   "version": "1.0.0",
   "description": "",
-  "main": "electron-src/js/index.js",
+  "main": "electron-src/js/main.js",
   "dependencies": {
     "electron-prebuilt": ""
   },
   "devDependencies": {
     "coffee-script": "",
     "typescript": "",
+    "node-sass": "",
     "jade": ""
   },
   "scripts": {
