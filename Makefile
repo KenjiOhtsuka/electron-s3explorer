@@ -4,7 +4,7 @@ default:
 	if [ ! -d electron-src/js ]; then mkdir electron-src/js; fi
 	./node_modules/.bin/node-sass -o electron-src/css src/sass
 	./node_modules/.bin/jade src/jade --out electron-src/html
-	./node_modules/.bin/coffee -c -o electron-src/js src/coffee
+	./node_modules/.bin/coffee -c -b -o electron-src/js src/coffee
 
 
 clean:
