@@ -1,6 +1,12 @@
-mkdir electron-src/css
-mkdir electron-src/html
-mkdir electron-src/js
+if [ ! -d electron-src/css ]; then
+  mkdir electron-src/css
+fi
+if [ ! -d electron-src/html ]; then
+  mkdir electron-src/html
+fi
+if [ ! -d electron-src/js ]; then
+  mkdir electron-src/js
+fi
 
 ./node_modules/.bin/jade src/jade --out electron-src/html
 #./node_modules/.bin/tsc --outDir electron-src/js -p src/ts
