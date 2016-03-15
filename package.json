@@ -8,7 +8,6 @@
   },
   "devDependencies": {
     "coffee-script": "",
-    "typescript": "",
     "node-sass": "",
     "jade": ""
   },
@@ -16,5 +15,5 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Kenji Otsuka",
-  "license": "ISC"
+  "license": "GPLv3"
 }
