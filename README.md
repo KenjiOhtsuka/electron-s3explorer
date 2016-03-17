@@ -8,12 +8,15 @@
 ## setup
 
 1. install nodejs
-2. `npm install`
+2. `. ./run.sh setup`
 
 ## develop
 
 1. build jade, coffeescript and sass
-  `. ./src/build.sh`
+  `. ./run.sh build`
+
+1. clean built files
+  `. ./run.sh clean`
 
 1. run electron
   `. ./run.sh`
