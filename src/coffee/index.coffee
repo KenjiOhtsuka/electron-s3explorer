@@ -2,29 +2,91 @@ mainPane = document.getElementById 'main_pane'
 contents = document.getElementById 'contents'
 delimiter = '/'
 
+class FileUtil
+  @pickBaseName: (key) ->
+    delimiterIndex = key.lastIndexOf(delimiter)
+    if delimiterIndex < 0 then return key
+    return key.substr(delimiterIndex + 1)
+  @pickExtension: (key) ->
+    periodIndex = key.lastIndexOf(".")
+    if periodIndex < 0 then return null
+    return key.substr(periodIndex + 1)
 
 class FsObjectDomFactory
   #@createFileDom: () ->
 
-  @createDirectoryDom: (name) ->
+  @createDirectoryDom: (key) ->
+    name = FileUtil.pickBaseName key.substr(0, key.length - 1)
+
     li = document.createElement 'li'
     li.classList.add 'fs_node'
-    li.setAttribute 'ondblclick', "explorer.showContents('#{name}')"
+    li.setAttribute 'ondblclick', "explorer.showContents('#{key}')"
+    iconSpan = document.createElement 'span'
+    iconSpan.classList.add 'fa'
+    iconSpan.classList.add 'fa-folder'
+    li.appendChild iconSpan
+    li.appendChild document.createTextNode(' ')
     li.appendChild(document.createTextNode(name))
     return li
 
-  @createFileDom: (name) ->
+  @createFileDom: (key) ->
+    name = FileUtil.pickBaseName key
+    extension = FileUtil.pickExtension key
+
     li = document.createElement 'li'
     li.classList.add 'fs_node'
+    iconSpan = document.createElement 'span'
+    iconSpan.classList.add 'fa'
+    switch extension
+      when 'zip', 'gz', 'bz'
+        iconSpan.classList.add 'fa-file-archive-o'
+      when 'jpg', 'jpeg', 'bmp', 'gif', 'png'
+        iconSpan.classList.add 'fa-file-image-o'
+      when 'pdf'
+        iconSpan.classList.add 'fa-file-pdf-o'
+      when 'wav', 'mp3'
+        iconSpan.classList.add 'fa-file-audio-o'
+      when 'avi', 'mp4', 'mepg'
+        iconSpan.classList.add 'fa-file-video-o'
+      when 'c', 'cpp', 'vb', 'vbs', 'js', 'ts', 'cs', 'java', 'kt'
+        iconSpan.classList.add 'fa-file-code-o'
+      when 'ppt'
+        iconSpan.classList.add 'fa-file-powerpoint-o'
+      when 'doc', 'docx'
+        iconSpan.classList.add 'fa-file-word-o'
+      when 'xls', 'xlsx'
+        iconSpan.classList.add 'fa-file-excel-o'
+      else
+        iconSpan.classList.add 'fa-file-o'
+    li.appendChild(iconSpan)
+    li.appendChild document.createTextNode(' ')
     li.appendChild(document.createTextNode(name))
     return li
+
+###
+class ExplorerWindow
+  _instance = null
+  class _ExplorerWindow
+    explorer = null
+    constructor: () ->
+      explorer = new Explorer()
+    showContents: (prefix = "") ->
+      explorer.showContents(prefix)
+  @get: () ->
+    return _instance ?: new _ExplorerWindow()
+###
 
 class Explorer
   _instance = null
   constructor: () ->
     throw new Error "This is singleton class!"
   class _Explorer
-    currentDirectory = ""
+    _currentDirectory = ""
+    setCurrentDirectory: (value) ->
+      @._currentDirectory = value
+      return @
+    getCurrentDirectory: () ->
+      return @._currentDirectory
     showContents: (prefix = "") ->
       request = new AWS.S3().listObjects
         Bucket: window.bucketName
@@ -39,18 +101,19 @@ class Explorer
         for f in json['Contents']
           console.log f['Key']
           contents.appendChild(FsObjectDomFactory.createFileDom(f['Key']))
-      @.currentDirectory = prefix
+      @.setCurrentDirectory(prefix)
+      document.getElementById('current_directory').innerText = @.getCurrentDirectory()
       request.send()
     clearContents: () ->
       while (contents.lastChild)
         contents.removeChild contents.lastChild
     up: () ->
-      if @.currentDirectory == 0
+      if @.getCurrentDirectory().length == 0
         return
       delimiterIndex =
-        @.currentDirectory.substr(0, @.currentDirectory .length - 1).
+        @.getCurrentDirectory().substr(0, @.getCurrentDirectory().length - 1).
           lastIndexOf(delimiter)
-      dirString = @.currentDirectory.substr(0, delimiterIndex + 1)
+      dirString = @.getCurrentDirectory().substr(0, delimiterIndex + 1)
       @.showContents(dirString)
 
   @get: () ->

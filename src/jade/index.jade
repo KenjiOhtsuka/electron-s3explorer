@@ -8,11 +8,12 @@ html(lang="en")
     link(rel="stylesheet", href="../lib/font-awesome-4.5.0/css/font-awesome.min.css")
   body
     div.tool_bar
-      span.tool_button.fa.fa-refresh(onclick="explorer.showContents(explorer.currentDirectory)")
+      span.tool_button.fa.fa-refresh(onclick="explorer.showContents(explorer.getCurrentDirectory())")
       span.tool_button.fa.fa-copy
       span.tool_button.fa.fa-paste
       span.tool_button.fa.fa-cut
       span.tool_button.fa.fa-arrow-up(onclick="explorer.up()")
+      span#current_directory
     div.center
       div.dir_tree
       div.main_pane#main_pane
