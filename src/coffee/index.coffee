@@ -12,13 +12,13 @@ document.addEventListener \
     switch e.keyCode
       when 8  # Backspace
         explorer.up()
-###
-      when 13 # Enter
-      when 27 # Space
-      when 35 # End
-      when 36 # Home
-      when 46 # Delete
-###
+#      when 13 # Enter
+#      when 27 # Space
+#      when 35 # End
+#      when 36 # Home
+#      when 46 # Delete
+      when 116 # F5
+        explorer.showContents(explorer.getCurrentDirectory())
 
 
 class FileUtil
