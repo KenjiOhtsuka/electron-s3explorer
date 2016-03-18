@@ -6,6 +6,21 @@ delimiter = '/'
 
 mainPane.style.width = (centerTag.clientWidth - dirTreeTag.offsetWidth).toString() + 'px'
 
+document.addEventListener \
+  'keydown',
+  (e) ->
+    switch e.keyCode
+      when 8  # Backspace
+        explorer.up()
+###
+      when 13 # Enter
+      when 27 # Space
+      when 35 # End
+      when 36 # Home
+      when 46 # Delete
+###
+
+
 class FileUtil
   @pickBaseName: (key) ->
     delimiterIndex = key.lastIndexOf(delimiter)
