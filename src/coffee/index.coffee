@@ -1,7 +1,7 @@
 centerTag = document.getElementsByClassName('center')[0]
 mainPane = document.getElementById 'main_pane'
-contents = document.getElementById 'contents'
-dirTreeTag = document.getElementsByClassName('dir_tree')[0]
+contentsTag = document.getElementById 'contents'
+dirTreeTag  = document.getElementsByClassName('dir_tree')[0]
 delimiter = '/'
 
 mainPane.style.width = (centerTag.clientWidth - dirTreeTag.offsetWidth).toString() + 'px'
@@ -124,16 +124,16 @@ class Explorer
         json = response.data
         console.log json
         for d in json['CommonPrefixes']
-          contents.appendChild(FsObjectDomFactory.createDirectoryDom(d['Prefix']))
+          contentsTag.appendChild(FsObjectDomFactory.createDirectoryDom(d['Prefix']))
         for f in json['Contents']
           console.log f['Key']
-          contents.appendChild(FsObjectDomFactory.createFileDom(f['Key']))
+          contentsTag.appendChild(FsObjectDomFactory.createFileDom(f['Key']))
       @.setCurrentDirectory(prefix)
       document.getElementById('current_directory').innerText = @.getCurrentDirectory()
       request.send()
     clearContents: () ->
-      while (contents.lastChild)
-        contents.removeChild contents.lastChild
+      while (contentsTag.lastChild)
+        contentsTag.removeChild contentsTag.lastChild
     up: () ->
       if @.getCurrentDirectory().length == 0
         return
