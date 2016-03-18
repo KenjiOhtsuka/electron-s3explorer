@@ -1,6 +1,10 @@
+centerTag = document.getElementsByClassName('center')[0]
 mainPane = document.getElementById 'main_pane'
 contents = document.getElementById 'contents'
+dirTreeTag = document.getElementsByClassName('dir_tree')[0]
 delimiter = '/'
+
+mainPane.style.width = (centerTag.clientWidth - dirTreeTag.offsetWidth).toString() + 'px'
 
 class FileUtil
   @pickBaseName: (key) ->
@@ -40,6 +44,7 @@ class FsObjectDomFactory
     li = document.createElement 'li'
     li.classList.add 'fs_node'
     iconSpan = document.createElement 'span'
+    iconSpan.classList.add 'icon'
     iconSpan.classList.add 'fa'
     switch extension
       when 'zip', 'gz', 'bz'
