@@ -40,6 +40,7 @@ class FsObjectDomFactory
     li = document.createElement 'li'
     li.classList.add 'fs_node'
     li.setAttribute 'ondblclick', "explorer.showContents('#{key}')"
+    li.setAttribute 'onclick', "explorer.selectFsNode(this)"
     iconSpan = document.createElement 'span'
     iconSpan.classList.add 'icon'
     iconSpan.classList.add 'fa'
@@ -58,6 +59,7 @@ class FsObjectDomFactory
 
     li = document.createElement 'li'
     li.classList.add 'fs_node'
+    li.setAttribute 'onclick', "explorer.selectFsNode(this)"
     iconSpan = document.createElement 'span'
     iconSpan.classList.add 'icon'
     iconSpan.classList.add 'fa'
@@ -142,6 +144,11 @@ class Explorer
           lastIndexOf(delimiter)
       dirString = @.getCurrentDirectory().substr(0, delimiterIndex + 1)
       @.showContents(dirString)
+    selectFsNode: (fsTag) =>
+      activeTags = contentsTag.getElementsByClassName 'active'
+      for activeTag in activeTags
+        activeTag.classList.remove 'active'
+      fsTag.classList.add 'active'
 
   @get: () ->
     return _instance ?= new _Explorer()

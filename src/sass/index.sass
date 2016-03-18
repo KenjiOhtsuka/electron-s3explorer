@@ -62,17 +62,20 @@ span#current_directory
 ul#contents
   list-style: none
   height:     100%
-  padding-right: 10px
-  padding-bottom: 10px
+  padding-right:  7px
+  padding-bottom: 7px
   resize:     horizontal
   overflow:   scroll
 
   li.fs_node
     display: inline-block
-    margin-left: 10px
-    margin-top:  10px
+    margin-left: 5px
+    margin-top:  5px
     width:       80px
     vertical-align: top
+    padding:     5px
+    &.active
+      background-color: lightblue
 
     span.icon
       font-size:  60px
@@ -85,3 +88,4 @@ ul#contents
       display:    block
       word-wrap:  break-word
       margin-top: 3px
+
