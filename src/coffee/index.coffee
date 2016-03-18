@@ -22,11 +22,15 @@ class FsObjectDomFactory
     li.classList.add 'fs_node'
     li.setAttribute 'ondblclick', "explorer.showContents('#{key}')"
     iconSpan = document.createElement 'span'
+    iconSpan.classList.add 'icon'
     iconSpan.classList.add 'fa'
     iconSpan.classList.add 'fa-folder'
+    nameSpan = document.createElement 'span'
+    nameSpan.classList.add 'name'
+    nameSpan.appendChild(document.createTextNode(name))
     li.appendChild iconSpan
     li.appendChild document.createTextNode(' ')
-    li.appendChild(document.createTextNode(name))
+    li.appendChild nameSpan
     return li
 
   @createFileDom: (key) ->
@@ -58,9 +62,12 @@ class FsObjectDomFactory
         iconSpan.classList.add 'fa-file-excel-o'
       else
         iconSpan.classList.add 'fa-file-o'
+    nameSpan = document.createElement 'span'
+    nameSpan.classList.add 'name'
+    nameSpan.appendChild(document.createTextNode(name))
     li.appendChild(iconSpan)
     li.appendChild document.createTextNode(' ')
-    li.appendChild(document.createTextNode(name))
+    li.appendChild nameSpan
     return li
 
 ###
