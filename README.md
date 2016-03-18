@@ -1,5 +1,7 @@
 # s3explorer
 
+Explorer of AWS S3
+
 ## configure
 
 * create your configuration coffeescript and modify it.  
