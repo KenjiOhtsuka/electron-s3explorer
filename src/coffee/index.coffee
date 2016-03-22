@@ -1,7 +1,9 @@
 centerTag = document.getElementsByClassName('center')[0]
 mainPane = document.getElementById 'main_pane'
+settingPane = document.getElementById 'setting_pane'
 contentsTag = document.getElementById 'contents'
 dirTreeTag  = document.getElementsByClassName('dir_tree')[0]
+settingPane = document.getElementById 'setting_pane'
 delimiter = '/'
 
 mainPane.style.width = (centerTag.clientWidth - dirTreeTag.offsetWidth).toString() + 'px'
@@ -111,11 +113,16 @@ class Explorer
     throw new Error "This is singleton class!"
   class _Explorer
     _currentDirectory = ""
+    _dispSetting = false
     setCurrentDirectory: (value) ->
       @._currentDirectory = value
       return @
     getCurrentDirectory: () ->
       return @._currentDirectory
+    setDispSetting: (value) ->
+      @._dispSetting = value
+    getDispSetting: () ->
+      return @._dispSetting
     showContents: (prefix = "") ->
       request = new AWS.S3().listObjects
         Bucket: window.bucketName
@@ -124,12 +131,14 @@ class Explorer
       request.on 'success', (response) =>
         @.clearContents()
         json = response.data
-        console.log json
+        console.log json['CommonPrefixes']
         for d in json['CommonPrefixes']
           contentsTag.appendChild(FsObjectDomFactory.createDirectoryDom(d['Prefix']))
         for f in json['Contents']
           console.log f['Key']
           contentsTag.appendChild(FsObjectDomFactory.createFileDom(f['Key']))
+        mainPane.style.width = (centerTag.clientWidth - dirTreeTag.offsetWidth).toString() + 'px'
+        mainPane.style.width = (centerTag.clientWidth - dirTreeTag.offsetWidth).toString() + 'px'
       @.setCurrentDirectory(prefix)
       document.getElementById('current_directory').innerText = @.getCurrentDirectory()
       request.send()
@@ -149,7 +158,33 @@ class Explorer
       for activeTag in activeTags
         activeTag.classList.remove 'active'
       fsTag.classList.add 'active'
+    toggleSetting: () ->
+      if @.getDispSetting()
+        @.setDispSetting(false)
+        settingPane.style.display = 'none'
+      else
+        @.setDispSetting(true)
+        settingPane.style.display = 'block'
+    loadConfigJson: () ->
+      fileReader = new FileReader()
+      fileReader.onload = (e) ->
+        json = JSON.parse(fileReader.result)
+        #json = eval(fileReader.result)
+        console.log json['region']
+        AWS.config.region = json['region']
+        AWS.config.update
+          'accessKeyId':     json['access_key_id']
+          'secretAccessKey': json['secret_access_key']
+        window.bucketName = json['bucket_name']
+      
+      fileReader.onerror = (e) ->
+        alert 'File Reading Error!'
 
+      file = document.getElementById('config_json').files[0]
+      fileReader.readAsText file
+
+      if explorer.getDispSetting()
+        explorer.toggleSetting()
   @get: () ->
     return _instance ?= new _Explorer()
 
@@ -164,7 +199,6 @@ request = new AWS.S3().listObjects
 #    console.log data
 
 explorer = Explorer.get()
-explorer.showContents()
 
 
   

@@ -1,5 +1,6 @@
 node_modules
 src/coffee/aws_init.coffee
+config/default.json
 
 electron-src/css
 electron-src/html
