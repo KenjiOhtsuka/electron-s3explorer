@@ -14,9 +14,16 @@ html(lang="en")
       span.tool_button.fa.fa-cut
       span.tool_button.fa.fa-arrow-up(onclick="explorer.up()")
       span#current_directory
+      span.tool_button.fa.fa-cog(onclick="explorer.toggleSetting()")
     div.center
       div.dir_tree
       div.main_pane#main_pane
         ul#contents
+      div.setting_pane#setting_pane
+        form onsubmit="return false;"
+          label
+          input(type="file")
+          button(type="button")
     div.status_bar
+    
     script(src="../js/index.js")

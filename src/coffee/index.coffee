@@ -1,7 +1,9 @@
 centerTag = document.getElementsByClassName('center')[0]
 mainPane = document.getElementById 'main_pane'
+settingPane = document.getElementById 'setting_pane'
 contentsTag = document.getElementById 'contents'
 dirTreeTag  = document.getElementsByClassName('dir_tree')[0]
+settingPane = document.getElementById 'setting_pane'
 delimiter = '/'
 
 mainPane.style.width = (centerTag.clientWidth - dirTreeTag.offsetWidth).toString() + 'px'
@@ -111,11 +113,16 @@ class Explorer
     throw new Error "This is singleton class!"
   class _Explorer
     _currentDirectory = ""
+    _dispSetting = false
     setCurrentDirectory: (value) ->
       @._currentDirectory = value
       return @
     getCurrentDirectory: () ->
       return @._currentDirectory
+    setDispSetting: (value) ->
+      @._dispSetting = value
+    getDispSetting: () ->
+      return @._dispSetting
     showContents: (prefix = "") ->
       request = new AWS.S3().listObjects
         Bucket: window.bucketName
@@ -149,6 +156,14 @@ class Explorer
       for activeTag in activeTags
         activeTag.classList.remove 'active'
       fsTag.classList.add 'active'
+    toggleSetting: () ->
+      if @.getDispSetting()
+        @.setDispSetting(false)
+        settingPane.style.display = 'none'
+      else
+        @.setDispSetting(true)
+        settingPane.style.display = 'block'
+
 
   @get: () ->
     return _instance ?= new _Explorer()
