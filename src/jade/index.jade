@@ -20,10 +20,10 @@ html(lang="en")
       div.main_pane#main_pane
         ul#contents
       div.setting_pane#setting_pane
-        form onsubmit="return false;"
+        form(onsubmit="return false;")
           label
-          input(type="file")
-          button(type="button")
+          input#config_json(type="file")
+          button(type="button", onclick="explorer.loadConfigJson()") Load
     div.status_bar
     
     script(src="../js/index.js")

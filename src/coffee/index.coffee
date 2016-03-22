@@ -131,7 +131,7 @@ class Explorer
       request.on 'success', (response) =>
         @.clearContents()
         json = response.data
-        console.log json
+        console.log json['CommonPrefixes']
         for d in json['CommonPrefixes']
           contentsTag.appendChild(FsObjectDomFactory.createDirectoryDom(d['Prefix']))
         for f in json['Contents']
@@ -163,7 +163,23 @@ class Explorer
       else
         @.setDispSetting(true)
         settingPane.style.display = 'block'
+    loadConfigJson: () ->
+      fileReader = new FileReader()
+      fileReader.onload = (e) ->
+        json = JSON.parse(fileReader.result)
+        #json = eval(fileReader.result)
+        console.log json['region']
+        AWS.config.region = json['region']
+        AWS.config.update
+          'accessKeyId':     json['access_key_id']
+          'secretAccessKey': json['secret_access_key']
+        window.bucketName = json['bucket_name']
+      
+      fileReader.onerror = (e) ->
+        alert 'File Reading Error!'
 
+      file = document.getElementById('config_json').files[0]
+      fileReader.readAsText file
 
   @get: () ->
     return _instance ?= new _Explorer()
@@ -179,7 +195,6 @@ request = new AWS.S3().listObjects
 #    console.log data
 
 explorer = Explorer.get()
-explorer.showContents()
 
 
   
