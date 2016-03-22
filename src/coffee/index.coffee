@@ -137,6 +137,8 @@ class Explorer
         for f in json['Contents']
           console.log f['Key']
           contentsTag.appendChild(FsObjectDomFactory.createFileDom(f['Key']))
+        mainPane.style.width = (centerTag.clientWidth - dirTreeTag.offsetWidth).toString() + 'px'
+        mainPane.style.width = (centerTag.clientWidth - dirTreeTag.offsetWidth).toString() + 'px'
       @.setCurrentDirectory(prefix)
       document.getElementById('current_directory').innerText = @.getCurrentDirectory()
       request.send()
@@ -181,6 +183,8 @@ class Explorer
       file = document.getElementById('config_json').files[0]
       fileReader.readAsText file
 
+      if explorer.getDispSetting()
+        explorer.toggleSetting()
   @get: () ->
     return _instance ?= new _Explorer()
 
