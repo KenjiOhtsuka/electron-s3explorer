@@ -43,6 +43,7 @@ div.status_bar
   width: 100%
   background-color: gray
 
+/* tool bar - start */
 span.tool_button
   display: inline-block
   height:    30px
@@ -53,3 +54,45 @@ span.tool_button
   cursor: pointer
   &:hover
     background-color: cyan
+
+span#current_directory
+  font-size: 16px
+  padding: 3px
+
+ul#contents
+  list-style: none
+  height:     100%
+  padding-right:  7px
+  padding-bottom: 7px
+  box-sizing: border-box
+  overflow:   scroll
+
+  li.fs_node
+    display: inline-block
+    margin-left: 5px
+    margin-top:  5px
+    width:       80px
+    vertical-align: top
+    padding:     5px
+    &.active
+      background-color: lightblue
+
+    span.icon
+      font-size:  60px
+      text-align: center
+      display:    block
+      color:      gray
+    span.name
+      font-size:  16px
+      text-align: center
+      display:    block
+      word-wrap:  break-word
+      margin-top: 3px
+
+div.setting_pane
+  background-color: white
+  position: absolute
+  width:    100%
+  height:   100%
+  z-index:  100
+  display:  none
