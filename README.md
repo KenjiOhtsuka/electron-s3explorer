@@ -15,6 +15,8 @@
 
 ## develop
 
+* For development, please prepare nodejs and npm.
+
 1. clean built files
   `. ./run.sh clean`
 
