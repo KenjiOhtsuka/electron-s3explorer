@@ -1,6 +1,6 @@
 # s3explorer
 
-* Explorer of AWS S
+* Explorer of AWS S3
 * supports mac, linux and windows
 
 ## configure
