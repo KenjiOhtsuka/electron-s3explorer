@@ -107,22 +107,35 @@ class ExplorerWindow
     return _instance ?: new _ExplorerWindow()
 ###
 
+class TreeView
+  @dom = null
+  @fsTree = null
+  constuctor: (dom, fsTree) ->
+    @dom = dom
+    @fsTree = fsTree
+  getFsTree: () ->
+    return @fsTree
+
 class Explorer
   _instance = null
   constructor: () ->
     throw new Error "This is singleton class!"
   class _Explorer
-    _currentDirectory = ""
-    _dispSetting = false
+    treeView = null
+    dirTree = {}
+    currentDirectory = ""
+    dispSetting = false
+    constructor: () ->
+      @.treeView = new TreeView(dirTreeTag, new FsTree())
     setCurrentDirectory: (value) ->
-      @._currentDirectory = value
+      @.currentDirectory = value
       return @
     getCurrentDirectory: () ->
-      return @._currentDirectory
+      return @.currentDirectory
     setDispSetting: (value) ->
-      @._dispSetting = value
+      @.dispSetting = value
     getDispSetting: () ->
-      return @._dispSetting
+      return @.dispSetting
     showContents: (prefix = "") ->
       request = new AWS.S3().listObjects
         Bucket: window.bucketName
@@ -130,10 +143,13 @@ class Explorer
         Prefix: prefix
       request.on 'success', (response) =>
         @.clearContents()
+        tree = @.treeView.getFsTree()
         json = response.data
         console.log json['CommonPrefixes']
         for d in json['CommonPrefixes']
           contentsTag.appendChild(FsObjectDomFactory.createDirectoryDom(d['Prefix']))
+          tree.add(d['Prefix'].replace(/\/$/, ""))
+          console.log(d['Prefix'])
         for f in json['Contents']
           console.log f['Key']
           contentsTag.appendChild(FsObjectDomFactory.createFileDom(f['Key']))
@@ -171,6 +187,7 @@ class Explorer
         json = JSON.parse(fileReader.result)
         #json = eval(fileReader.result)
         console.log json['region']
+        # load aws config from json
         AWS.config.region = json['region']
         AWS.config.update
           'accessKeyId':     json['access_key_id']
@@ -185,8 +202,47 @@ class Explorer
 
       if explorer.getDispSetting()
         explorer.toggleSetting()
+    getTreeView: () ->
+      return @.treeView
   @get: () ->
     return _instance ?= new _Explorer()
+
+class FsObject
+  children = []
+  name = null
+  type = null # d or f
+  constructor: (name) ->
+    @.name = name
+  getName: () ->
+    return @.name
+  setName: (name) ->
+    @.name = name
+    return @
+  getChild: (name) ->
+    for fso in _children
+      if fso.getName() == name
+        return fso
+    return null
+  addChild: (name) ->
+    if null == @.getChild(name)
+      @.children.push(new FsObject(name))
+
+class FsTree
+  root = null
+  constructor: () ->
+    # add root node
+    @.root = new FsObject()
+  add: (prefix) ->
+    targetDir = _root
+    dirs = prefix.split(delimiter)
+    for dir in dirs
+      if dir != ""
+        c = targetDir.getChild(dir)
+        if (c == null)
+          targetDir.addChild(dir)
+        targetDir = targetDir.getChild(dir)
+
+
 
 request = new AWS.S3().listObjects
   Bucket: window.bucketName,
